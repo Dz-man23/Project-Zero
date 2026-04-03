@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Zero — Built for People Starting from $0</title>
+<meta name="description" content="The complete system for building income from zero. No fluff, no hype. Just the tools, strategy, and structure that actually work.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ─── CSS VARIABLES ─────────────────────────────────────── */
+:root {
+  --black:      #0a0a0a;
+  --dark:       #111111;
+  --card:       #161616;
+  --border:     #222222;
+  --gold:       #c9a84c;
+  --gold-light: #e8c96a;
+  --gold-dim:   #7a6230;
+  --white:      #f5f0e8;
+  --muted:      #888880;
+  --success:    #3ddc84;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body:    'DM Sans', sans-serif;
+  --font-mono:    'DM Mono', monospace;
+}
+
+/* ─── RESET ──────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+
+/* ─── NOISE TEXTURE OVERLAY ──────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.4;
+}
+
+/* ─── UTILITY ────────────────────────────────────────────── */
+.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+.gold { color: var(--gold); }
+.mono { font-family: var(--font-mono); }
+.tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--gold);
+  border: 1px solid var(--gold-dim); padding: 4px 12px; border-radius: 2px;
+  background: rgba(201,168,76,0.06);
+}
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-body); font-size: 15px; font-weight: 500;
+  padding: 14px 28px; border-radius: 3px; cursor: pointer;
+  border: none; transition: all 0.25s ease; white-space: nowrap;
+}
+.btn-primary {
+  background: var(--gold); color: var(--black);
+  box-shadow: 0 0 30px rgba(201,168,76,0.25);
+}
+.btn-primary:hover {
+  background: var(--gold-light);
+  box-shadow: 0 0 50px rgba(201,168,76,0.4);
+  transform: translateY(-1px);
+}
+.btn-outline {
+  background: transparent; color: var(--white);
+  border: 1px solid var(--border);
+}
+.btn-outline:hover {
+  border-color: var(--gold); color: var(--gold);
+}
+section { padding: 100px 0; }
+
+/* ─── NAV ────────────────────────────────────────────────── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+  padding: 18px 0;
+  border-bottom: 1px solid transparent;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(0px);
+}
+nav.scrolled {
+  background: rgba(10,10,10,0.92);
+  border-bottom-color: var(--border);
+  backdrop-filter: blur(12px);
+}
+.nav-inner {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-logo {
+  font-family: var(--font-display); font-size: 22px; font-weight: 900;
+  letter-spacing: -0.02em;
+}
+.nav-logo span { color: var(--gold); }
+.nav-links {
+  display: flex; align-items: center; gap: 32px;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 14px; color: var(--muted);
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--white); }
+.nav-cta { display: flex; gap: 10px; }
+
+/* ─── HERO ───────────────────────────────────────────────── */
+#hero {
+  min-height: 100vh; display: flex; align-items: center;
+  padding-top: 80px; position: relative; overflow: hidden;
+}
+.hero-glow {
+  position: absolute;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%);
+  top: 50%; left: 50%; transform: translate(-50%, -60%);
+  pointer-events: none;
+}
+.hero-grid-lines {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(201,168,76,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,168,76,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+.hero-content { position: relative; max-width: 820px; }
+.hero-eyebrow { margin-bottom: 28px; }
+.hero-headline {
+  font-family: var(--font-display); font-size: clamp(48px, 7vw, 86px);
+  font-weight: 900; line-height: 1.0; letter-spacing: -0.03em;
+  margin-bottom: 28px;
+}
+.hero-headline em { font-style: normal; color: var(--gold); }
+.hero-sub {
+  font-size: 18px; line-height: 1.7; color: var(--muted);
+  max-width: 520px; margin-bottom: 44px; font-weight: 300;
+}
+.hero-actions { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+.hero-social-proof {
+  margin-top: 64px; padding-top: 40px;
+  border-top: 1px solid var(--border);
+  display: flex; flex-wrap: wrap; gap: 40px; align-items: center;
+}
+.proof-stat strong {
+  display: block; font-family: var(--font-display);
+  font-size: 32px; color: var(--gold); line-height: 1;
+}
+.proof-stat small {
+  font-size: 12px; color: var(--muted); letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.proof-divider { width: 1px; height: 40px; background: var(--border); }
+
+/* ─── SECTION HEADER ─────────────────────────────────────── */
+.section-header { text-align: center; margin-bottom: 64px; }
+.section-header h2 {
+  font-family: var(--font-display); font-size: clamp(32px, 5vw, 52px);
+  font-weight: 900; letter-spacing: -0.02em; line-height: 1.1;
+  margin: 16px 0 20px;
+}
+.section-header p { font-size: 17px; color: var(--muted); max-width: 520px; margin: 0 auto; }
+
+/* ─── FEATURES ───────────────────────────────────────────── */
+#features { background: var(--dark); }
+.features-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2px; border: 2px solid var(--border); border-radius: 8px; overflow: hidden;
+}
+.feature-card {
+  background: var(--card); padding: 36px;
+  transition: background 0.3s;
+}
+.feature-card:hover { background: #1a1a1a; }
+.feature-icon {
+  width: 44px; height: 44px; margin-bottom: 20px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(201,168,76,0.08); border: 1px solid var(--gold-dim);
+  border-radius: 4px; font-size: 20px;
+}
+.feature-card h3 {
+  font-family: var(--font-display); font-size: 20px;
+  margin-bottom: 10px; letter-spacing: -0.01em;
+}
+.feature-card p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+/* ─── HOW IT WORKS ───────────────────────────────────────── */
+.steps-track { position: relative; }
+.steps-line {
+  position: absolute; left: 27px; top: 0; bottom: 0;
+  width: 1px; background: linear-gradient(to bottom, var(--gold), transparent);
+}
+.step { display: flex; gap: 28px; padding: 0 0 52px 0; position: relative; }
+.step:last-child { padding-bottom: 0; }
+.step-num {
+  flex-shrink: 0; width: 54px; height: 54px;
+  border: 1px solid var(--gold); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-size: 14px; color: var(--gold);
+  background: var(--black); z-index: 1;
+}
+.step-body { padding-top: 12px; }
+.step-body h3 {
+  font-family: var(--font-display); font-size: 22px; margin-bottom: 8px;
+}
+.step-body p { font-size: 15px; color: var(--muted); line-height: 1.7; }
+
+/* ─── TESTIMONIALS ───────────────────────────────────────── */
+#testimonials { background: var(--dark); }
+.testimonials-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+.testimonial-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 6px; padding: 32px;
+  transition: border-color 0.3s;
+}
+.testimonial-card:hover { border-color: var(--gold-dim); }
+.stars { color: var(--gold); font-size: 14px; margin-bottom: 16px; }
+.testimonial-card blockquote {
+  font-size: 15px; line-height: 1.8; color: #ccc;
+  margin-bottom: 24px; font-style: italic;
+}
+.testimonial-author { display: flex; align-items: center; gap: 12px; }
+.author-avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold-dim), var(--border));
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 14px; color: var(--gold);
+}
+.author-info strong { display: block; font-size: 14px; }
+.author-info small { font-size: 12px; color: var(--muted); }
+
+/* ─── PRICING ────────────────────────────────────────────── */
+.pricing-wrapper { max-width: 520px; margin: 0 auto; }
+.pricing-card {
+  background: var(--card);
+  border: 1px solid var(--gold-dim);
+  border-radius: 10px; overflow: hidden;
+  box-shadow: 0 0 60px rgba(201,168,76,0.1);
+}
+.pricing-header {
+  background: linear-gradient(135deg, rgba(201,168,76,0.15), rgba(201,168,76,0.03));
+  padding: 40px; border-bottom: 1px solid var(--border);
+  text-align: center;
+}
+.pricing-label {
+  font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 16px;
+}
+.pricing-amount {
+  font-family: var(--font-display); font-size: 72px;
+  font-weight: 900; line-height: 1; letter-spacing: -0.04em;
+}
+.pricing-amount sup { font-size: 28px; vertical-align: super; }
+.pricing-once { font-size: 13px; color: var(--muted); margin-top: 8px; }
+.pricing-body { padding: 40px; }
+.pricing-features { list-style: none; margin-bottom: 36px; }
+.pricing-features li {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 10px 0; border-bottom: 1px solid var(--border);
+  font-size: 15px;
+}
+.pricing-features li:last-child { border-bottom: none; }
+.pricing-features li::before {
+  content: '✓'; color: var(--gold); font-weight: 700;
+  flex-shrink: 0; margin-top: 1px;
+}
+.pricing-cta { width: 100%; justify-content: center; font-size: 16px; padding: 16px; }
+.pricing-note { text-align: center; font-size: 13px; color: var(--muted); margin-top: 14px; }
+
+/* ─── EMAIL CAPTURE ──────────────────────────────────────── */
+#capture { background: var(--dark); }
+.capture-inner {
+  max-width: 560px; margin: 0 auto; text-align: center;
+}
+.capture-inner h2 {
+  font-family: var(--font-display); font-size: clamp(28px, 4vw, 42px);
+  font-weight: 900; margin: 16px 0 12px;
+}
+.capture-inner p { color: var(--muted); margin-bottom: 32px; }
+.email-form { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.email-input {
+  flex: 1; min-width: 220px; padding: 14px 18px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 3px; color: var(--white);
+  font-family: var(--font-body); font-size: 15px;
+  outline: none; transition: border-color 0.2s;
+}
+.email-input:focus { border-color: var(--gold); }
+.email-input::placeholder { color: var(--muted); }
+#capture-msg { margin-top: 16px; font-size: 14px; min-height: 20px; }
+
+/* ─── PAYPAL SECTION ─────────────────────────────────────── */
+#payment { padding: 0 0 100px; }
+#paypal-button-container { margin: 24px auto; max-width: 400px; min-height: 50px; }
+.payment-wrapper { max-width: 500px; margin: 0 auto; text-align: center; }
+#payment-status {
+  margin-top: 20px; padding: 16px 20px; border-radius: 4px;
+  font-size: 14px; display: none;
+}
+#payment-status.success {
+  display: block; background: rgba(61,220,132,0.1);
+  border: 1px solid rgba(61,220,132,0.3); color: var(--success);
+}
+#payment-status.error {
+  display: block; background: rgba(255,80,80,0.1);
+  border: 1px solid rgba(255,80,80,0.3); color: #ff8080;
+}
+.access-link {
+  display: none; margin-top: 24px; padding: 24px;
+  background: rgba(201,168,76,0.08); border: 1px solid var(--gold-dim);
+  border-radius: 6px; text-align: center;
+}
+.access-link.show { display: block; }
+.access-link h3 { font-family: var(--font-display); margin-bottom: 12px; color: var(--gold); }
+.access-link a {
+  font-family: var(--font-mono); font-size: 13px;
+  color: var(--gold); text-decoration: underline;
+}
+
+/* ─── FOOTER ─────────────────────────────────────────────── */
+footer {
+  border-top: 1px solid var(--border); padding: 40px 0;
+  text-align: center; color: var(--muted); font-size: 13px;
+}
+footer .footer-logo {
+  font-family: var(--font-display); font-size: 20px;
+  font-weight: 900; margin-bottom: 16px;
+}
+footer .footer-logo span { color: var(--gold); }
+
+/* ─── ANIMATIONS ─────────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse-gold {
+  0%, 100% { box-shadow: 0 0 30px rgba(201,168,76,0.25); }
+  50%       { box-shadow: 0 0 60px rgba(201,168,76,0.5); }
+}
+.hero-content > * { animation: fadeUp 0.7s ease both; }
+.hero-eyebrow    { animation-delay: 0.1s; }
+.hero-headline   { animation-delay: 0.2s; }
+.hero-sub        { animation-delay: 0.3s; }
+.hero-actions    { animation-delay: 0.4s; }
+.hero-social-proof { animation-delay: 0.5s; }
+.btn-primary { animation: pulse-gold 3s ease infinite; }
+
+/* ─── MOBILE ─────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  section { padding: 70px 0; }
+  .step { gap: 18px; }
+  .steps-line { left: 21px; }
+  .step-num { width: 42px; height: 42px; font-size: 12px; }
+  .pricing-amount { font-size: 56px; }
+  .hero-social-proof { gap: 24px; }
+  .proof-divider { display: none; }
+}
+
+/* ─── MODAL ──────────────────────────────────────────────── */
+.modal-overlay {
+  display: none; position: fixed; inset: 0; z-index: 9999;
+  background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
+  align-items: center; justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--card); border: 1px solid var(--gold-dim);
+  border-radius: 10px; padding: 48px; max-width: 480px; width: 90%;
+  text-align: center; animation: fadeUp 0.3s ease;
+}
+.modal h2 { font-family: var(--font-display); font-size: 28px; margin-bottom: 12px; }
+.modal p { color: var(--muted); margin-bottom: 28px; }
+.modal-close {
+  background: none; border: 1px solid var(--border); color: var(--muted);
+  padding: 8px 20px; border-radius: 3px; cursor: pointer;
+  font-family: var(--font-body); font-size: 13px; margin-top: 16px;
+}
+.modal-close:hover { border-color: var(--gold); color: var(--white); }
+</style>
+</head>
+<body>
+
+<!-- ───────────────────── NAV ───────────────────────────── -->
+<nav id="navbar">
+  <div class="container nav-inner">
+    <div class="nav-logo">Project<span>Zero</span></div>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#how-it-works">How It Works</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="#pricing" class="btn btn-primary" style="padding:10px 20px;font-size:14px;">Get Access →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ───────────────────── HERO ──────────────────────────── -->
+<section id="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-grid-lines"></div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <span class="tag">⬡ The Zero-to-Income System</span>
+      </div>
+      <h1 class="hero-headline">
+        Built for people<br>starting from <em>$0.</em>
+      </h1>
+      <p class="hero-sub">
+        No fluff, no hype, no gatekeeping. Project Zero is the complete system — tools, strategy, and structure — for building real income starting with exactly what you have right now.
+      </p>
+      <div class="hero-actions">
+        <a href="#pricing" class="btn btn-primary">Get Instant Access →</a>
+        <a href="#how-it-works" class="btn btn-outline">See How It Works</a>
+      </div>
+      <div class="hero-social-proof">
+        <div class="proof-stat">
+          <strong>2,400+</strong>
+          <small>Active Users</small>
+        </div>
+        <div class="proof-divider"></div>
+        <div class="proof-stat">
+          <strong>$0</strong>
+          <small>Required to Start</small>
+        </div>
+        <div class="proof-divider"></div>
+        <div class="proof-stat">
+          <strong>One-Time</strong>
+          <small>Payment Forever</small>
+        </div>
+        <div class="proof-divider"></div>
+        <div class="proof-stat">
+          <strong>100%</strong>
+          <small>No Subscription</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────── FEATURES ──────────────────────── -->
+<section id="features">
+  <div class="container">
+    <div class="section-header">
+      <span class="tag">What's Inside</span>
+      <h2>Everything you need.<br><em class="gold">Nothing you don't.</em></h2>
+      <p>Built lean on purpose. No bloat, no upsells. One system, one payment, unlimited access.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">📐</div>
+        <h3>The Zero Blueprint</h3>
+        <p>A proven framework for identifying your fastest path to income based on the skills and time you already have.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚙️</div>
+        <h3>Free Tool Stack</h3>
+        <p>Curated list of 100% free tools that replace expensive software. Build a full business without spending a cent on tools.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💬</div>
+        <h3>Scripts & Templates</h3>
+        <p>Done-for-you outreach scripts, proposals, pricing templates, and contracts. Copy, adapt, and send.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3>Income Tracker</h3>
+        <p>Built-in tracking dashboard to monitor your pipeline, revenue, and growth week by week.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🧠</div>
+        <h3>Mindset Modules</h3>
+        <p>Short, dense audio sessions designed to eliminate the psychological blocks that keep people stuck at zero.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔄</div>
+        <h3>Lifetime Updates</h3>
+        <p>The system evolves as markets change. Every update, every new module — included at no extra cost, forever.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────── HOW IT WORKS ──────────────────── -->
+<section id="how-it-works">
+  <div class="container" style="max-width:700px;">
+    <div class="section-header">
+      <span class="tag">The Process</span>
+      <h2>Four steps.<br><em class="gold">Real results.</em></h2>
+      <p>The system is designed to get you earning within 30 days, even if you're starting with zero experience and zero cash.</p>
+    </div>
+    <div class="steps-track">
+      <div class="steps-line"></div>
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-body">
+          <h3>Map Your Zero</h3>
+          <p>Complete the 20-minute audit to identify your hidden assets — skills, time, network, access — that can be turned into income immediately. No experience required.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-body">
+          <h3>Choose Your Path</h3>
+          <p>Select from 12 validated income paths matched to your audit results. Each path includes a step-by-step roadmap, realistic timelines, and first client strategies.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-body">
+          <h3>Execute the System</h3>
+          <p>Follow the daily action plans. Use the templates, scripts, and tools. Everything is spelled out — there's no guessing, no figuring things out from scratch.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-body">
+          <h3>Scale What Works</h3>
+          <p>Once you close your first deal, the scale modules show you how to multiply income without multiplying hours. Build systems, not just a hustle.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────── TESTIMONIALS ──────────────────── -->
+<section id="testimonials">
+  <div class="container">
+    <div class="section-header">
+      <span class="tag">Real People, Real Results</span>
+      <h2>What users are <em class="gold">saying.</em></h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <blockquote>"I was skeptical, but the blueprint helped me land my first $800 client within 3 weeks. I had zero professional experience. This is the real deal."</blockquote>
+        <div class="testimonial-author">
+          <div class="author-avatar">A</div>
+          <div class="author-info">
+            <strong>Amara K.</strong>
+            <small>Freelance Copywriter, Nairobi</small>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <blockquote>"Stopped waiting for the right moment and just started. Month one: $0. Month two: $1,200. The scripts alone are worth 10x the price."</blockquote>
+        <div class="testimonial-author">
+          <div class="author-avatar">J</div>
+          <div class="author-info">
+            <strong>James R.</strong>
+            <small>Social Media Manager, Lagos</small>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <blockquote>"I've bought a lot of courses. Most are fluff. Project Zero is ruthlessly practical. Every page has something you can use today, not someday."</blockquote>
+        <div class="testimonial-author">
+          <div class="author-avatar">S</div>
+          <div class="author-info">
+            <strong>Sofia M.</strong>
+            <small>Consultant, Algiers</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────── EMAIL CAPTURE ─────────────────── -->
+<section id="capture">
+  <div class="container">
+    <div class="capture-inner">
+      <span class="tag">Free Starter Pack</span>
+      <h2>Get the free <em class="gold">Zero Audit</em> first.</h2>
+      <p>Drop your email and we'll send you the Zero Audit tool — the same first step inside the full system. No credit card. No pitch. Just value.</p>
+      <div class="email-form">
+        <input type="email" class="email-input" id="email-input" placeholder="your@email.com">
+        <button class="btn btn-primary" onclick="handleEmailSignup()">Send It →</button>
+      </div>
+      <p id="capture-msg"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────── PRICING ────────────────────────── -->
+<section id="pricing">
+  <div class="container">
+    <div class="section-header">
+      <span class="tag">Pricing</span>
+      <h2>One price.<br><em class="gold">Everything included.</em></h2>
+      <p>No subscription. No tiers. No upsells. Pay once, use forever.</p>
+    </div>
+    <div class="pricing-wrapper">
+      <div class="pricing-card">
+        <div class="pricing-header">
+          <div class="pricing-label">Project Zero — Full Access</div>
+          <div class="pricing-amount"><sup>$</sup>47</div>
+          <div class="pricing-once">One-time payment · No recurring fees</div>
+        </div>
+        <div class="pricing-body">
+          <ul class="pricing-features">
+            <li>The Zero Blueprint (full framework)</li>
+            <li>12 Income Path Roadmaps</li>
+            <li>Free Tool Stack Guide</li>
+            <li>100+ Scripts & Templates</li>
+            <li>Income Tracker Dashboard</li>
+            <li>Mindset Audio Sessions</li>
+            <li>Lifetime Updates</li>
+            <li>Private Community Access</li>
+          </ul>
+
+          <!-- PayPal Button -->
+          <div id="paypal-button-container"></div>
+
+          <!-- Fallback button -->
+          <div id="paypal-fallback" style="text-align:center;display:none;">
+            <button class="btn btn-primary pricing-cta" onclick="openPayPalFallback()">
+              Pay with PayPal →
+            </button>
+          </div>
+
+          <div id="payment-status"></div>
+          <div class="access-link" id="access-link">
+            <h3>🎉 Access Granted!</h3>
+            <p>Thank you for your purchase. Click below to access Project Zero:</p>
+            <a href="#" id="private-link">→ Access Project Zero Dashboard</a>
+            <p style="margin-top:12px;font-size:12px;color:var(--muted);">Check your email for a copy of this link.</p>
+          </div>
+          <p class="pricing-note">🔒 Secure checkout via PayPal · 30-day money-back guarantee</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────── FOOTER ─────────────────────────── -->
+<footer>
+  <div class="container">
+    <div class="footer-logo">Project<span>Zero</span></div>
+    <p>Built for people who start from zero. © 2025 Project Zero. All rights reserved.</p>
+    <p style="margin-top:8px;font-size:11px;color:#555;">
+      <a href="#" style="color:#555;">Privacy</a> · <a href="#" style="color:#555;">Terms</a> · <a href="#" style="color:#555;">Contact</a>
+    </p>
+  </div>
+</footer>
+
+<!-- ─── MODAL ──────────────────────────────────────────────── -->
+<div class="modal-overlay" id="success-modal">
+  <div class="modal">
+    <h2 class="gold">You're in. ✓</h2>
+    <p>Your Zero Audit is on its way. Check your inbox (and spam just in case). While you wait, see why 2,400+ people chose the full system.</p>
+    <a href="#pricing" class="btn btn-primary" style="width:100%;justify-content:center;" onclick="closeModal()">See Full System →</a>
+    <br>
+    <button class="modal-close" onclick="closeModal()">Close</button>
+  </div>
+</div>
+
+<!-- ─── CONFIG ─────────────────────────────────────────────── -->
+<script>
+// ============================================================
+//  PROJECT ZERO — CONFIGURATION
+//  Replace these values with your real credentials
+// ============================================================
+const CONFIG = {
+  // Supabase
+  SUPABASE_URL: 'https://YOUR_PROJECT.supabase.co',
+  SUPABASE_ANON_KEY: 'YOUR_SUPABASE_ANON_KEY',
+
+  // PayPal
+  PAYPAL_CLIENT_ID: 'YOUR_PAYPAL_CLIENT_ID',
+  PAYPAL_AMOUNT: '47.00',
+  PAYPAL_CURRENCY: 'USD',
+
+  // Product
+  PRIVATE_APP_URL: 'https://your-app-link.com/dashboard',
+
+  // Notion API (called via a proxy/serverless function for security)
+  NOTION_PROXY_URL: 'https://your-notion-proxy.netlify.app/api/notion',
+};
+</script>
+
+<!-- ─── SUPABASE SDK ───────────────────────────────────────── -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+
+<!-- ─── PAYPAL SDK ────────────────────────────────────────── -->
+<script>
+// Load PayPal SDK dynamically after config
+(function loadPayPal() {
+  const script = document.createElement('script');
+  script.src = `https://www.paypal.com/sdk/js?client-id=${CONFIG.PAYPAL_CLIENT_ID}&currency=${CONFIG.PAYPAL_CURRENCY}`;
+  script.onload = initPayPal;
+  script.onerror = () => {
+    document.getElementById('paypal-fallback').style.display = 'block';
+  };
+  document.head.appendChild(script);
+})();
+</script>
+
+<!-- ─── CORE SCRIPTS ───────────────────────────────────────── -->
+<script>
+// ============================================================
+//  1. SUPABASE CLIENT
+// ============================================================
+let supabase;
+try {
+  supabase = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+} catch(e) {
+  console.warn('Supabase not configured yet. Tracking disabled.');
+}
+
+// ============================================================
+//  2. SESSION & FINGERPRINTING
+// ============================================================
+function getOrCreateSession() {
+  let sid = localStorage.getItem('pz_session');
+  if (!sid) {
+    sid = 'pz_' + Date.now() + '_' + Math.random().toString(36).slice(2, 9);
+    localStorage.setItem('pz_session', sid);
+  }
+  return sid;
+}
+
+function getDeviceType() {
+  const w = window.innerWidth;
+  if (w < 768) return 'mobile';
+  if (w < 1024) return 'tablet';
+  return 'desktop';
+}
+
+function getReferralSource() {
+  const ref = document.referrer;
+  if (!ref) return 'direct';
+  if (ref.includes('google')) return 'google';
+  if (ref.includes('facebook') || ref.includes('fb.com')) return 'facebook';
+  if (ref.includes('twitter') || ref.includes('t.co')) return 'twitter';
+  if (ref.includes('instagram')) return 'instagram';
+  if (ref.includes('tiktok')) return 'tiktok';
+  try { return new URL(ref).hostname; } catch { return 'other'; }
+}
+
+function getUTMParams() {
+  const p = new URLSearchParams(window.location.search);
+  return {
+    utm_source:   p.get('utm_source')   || null,
+    utm_medium:   p.get('utm_medium')   || null,
+    utm_campaign: p.get('utm_campaign') || null,
+  };
+}
+
+// ============================================================
+//  3. VISIT TRACKING
+// ============================================================
+async function trackVisit() {
+  if (!supabase) return;
+  const sessionId = getOrCreateSession();
+
+  // Geo via free IP API
+  let country = 'unknown', city = 'unknown';
+  try {
+    const geo = await fetch('https://ipapi.co/json/').then(r => r.json());
+    country = geo.country_name || 'unknown';
+    city    = geo.city || 'unknown';
+  } catch {}
+
+  const payload = {
+    session_id:    sessionId,
+    timestamp:     new Date().toISOString(),
+    device_type:   getDeviceType(),
+    country,
+    city,
+    referral:      getReferralSource(),
+    page_url:      window.location.href,
+    ...getUTMParams(),
+  };
+
+  try {
+    await supabase.from('visits').insert([payload]);
+    console.log('[PZ] Visit tracked:', sessionId);
+  } catch(e) {
+    console.warn('[PZ] Tracking failed (expected if not configured):', e.message);
+  }
+}
+
+// ============================================================
+//  4. EMAIL SIGNUP
+// ============================================================
+async function handleEmailSignup() {
+  const emailEl = document.getElementById('email-input');
+  const msg = document.getElementById('capture-msg');
+  const email = emailEl.value.trim();
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    msg.style.color = '#ff8080';
+    msg.textContent = 'Please enter a valid email address.';
+    return;
+  }
+
+  msg.style.color = 'var(--muted)';
+  msg.textContent = 'Submitting...';
+
+  const sessionId = getOrCreateSession();
+
+  // Supabase
+  if (supabase) {
+    try {
+      await supabase.from('leads').insert([{
+        email,
+        session_id: sessionId,
+        source: getReferralSource(),
+        timestamp: new Date().toISOString(),
+        status: 'lead',
+      }]);
+    } catch(e) { console.warn('[PZ] Lead insert failed:', e.message); }
+  }
+
+  // Notion proxy
+  try {
+    await fetch(CONFIG.NOTION_PROXY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'add_lead',
+        email,
+        session_id: sessionId,
+        timestamp: new Date().toISOString(),
+      }),
+    });
+  } catch(e) { console.warn('[PZ] Notion sync failed:', e.message); }
+
+  msg.style.color = 'var(--success)';
+  msg.textContent = '✓ Sent! Check your inbox.';
+  emailEl.value = '';
+  openModal();
+}
+
+// ============================================================
+//  5. PAYPAL INTEGRATION
+// ============================================================
+function initPayPal() {
+  if (!window.paypal) {
+    document.getElementById('paypal-fallback').style.display = 'block';
+    return;
+  }
+
+  paypal.Buttons({
+    style: {
+      layout: 'vertical',
+      color:  'gold',
+      shape:  'rect',
+      label:  'pay',
+    },
+
+    createOrder: (data, actions) => {
+      return actions.order.create({
+        purchase_units: [{
+          amount: {
+            value:    CONFIG.PAYPAL_AMOUNT,
+            currency_code: CONFIG.PAYPAL_CURRENCY,
+          },
+          description: 'Project Zero — Full Access (One-Time)',
+        }],
+      });
+    },
+
+    onApprove: async (data, actions) => {
+      const order = await actions.order.capture();
+      const payerEmail = order.payer?.email_address || 'unknown';
+      const txId = order.id;
+      const amount = order.purchase_units[0].amount.value;
+
+      showPaymentStatus('Processing your access...', 'success');
+      await onPaymentSuccess({ email: payerEmail, txId, amount, order });
+    },
+
+    onError: (err) => {
+      console.error('[PZ] PayPal error:', err);
+      showPaymentStatus('Payment failed. Please try again or contact support.', 'error');
+    },
+
+    onCancel: () => {
+      showPaymentStatus('Payment cancelled. Your access is waiting whenever you\'re ready.', 'error');
+    },
+  }).render('#paypal-button-container');
+}
+
+async function onPaymentSuccess({ email, txId, amount, order }) {
+  const sessionId = getOrCreateSession();
+  const ts = new Date().toISOString();
+
+  // 1. Store in Supabase
+  if (supabase) {
+    try {
+      await supabase.from('purchases').insert([{
+        session_id:    sessionId,
+        email,
+        transaction_id: txId,
+        amount:         parseFloat(amount),
+        currency:       CONFIG.PAYPAL_CURRENCY,
+        timestamp:      ts,
+        status:         'completed',
+      }]);
+
+      // Update lead status
+      await supabase
+        .from('leads')
+        .update({ status: 'customer' })
+        .eq('email', email);
+
+    } catch(e) { console.warn('[PZ] Purchase insert failed:', e.message); }
+  }
+
+  // 2. Sync to Notion
+  try {
+    await fetch(CONFIG.NOTION_PROXY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'add_purchase',
+        email, txId, amount, timestamp: ts, session_id: sessionId,
+      }),
+    });
+  } catch(e) { console.warn('[PZ] Notion purchase sync failed:', e.message); }
+
+  // 3. Mark customer in localStorage
+  localStorage.setItem('pz_customer', JSON.stringify({ email, txId, ts }));
+
+  // 4. Show access
+  showPaymentStatus('✓ Payment confirmed! Your access is ready below.', 'success');
+  grantAccess(email);
+}
+
+function grantAccess(email) {
+  const link = document.getElementById('private-link');
+  // Add email token to link for verification
+  link.href = CONFIG.PRIVATE_APP_URL + '?ref=' + btoa(email);
+  document.getElementById('access-link').classList.add('show');
+}
+
+function showPaymentStatus(msg, type) {
+  const el = document.getElementById('payment-status');
+  el.textContent = msg;
+  el.className = type;
+  el.style.display = 'block';
+}
+
+function openPayPalFallback() {
+  window.open(`https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=${CONFIG.PAYPAL_CLIENT_ID}&amount=${CONFIG.PAYPAL_AMOUNT}&currency_code=${CONFIG.PAYPAL_CURRENCY}&item_name=Project+Zero+Full+Access`, '_blank');
+}
+
+// ============================================================
+//  6. NAV SCROLL EFFECT
+// ============================================================
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('navbar');
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// ============================================================
+//  7. MODAL
+// ============================================================
+function openModal() {
+  document.getElementById('success-modal').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('success-modal').classList.remove('open');
+}
+document.getElementById('success-modal').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) closeModal();
+});
+
+// ============================================================
+//  8. RETURNING CUSTOMER CHECK
+// ============================================================
+function checkReturningCustomer() {
+  const customer = localStorage.getItem('pz_customer');
+  if (customer) {
+    try {
+      const { email } = JSON.parse(customer);
+      grantAccess(email);
+      showPaymentStatus('Welcome back! Your access link is below.', 'success');
+    } catch {}
+  }
+}
+
+// ============================================================
+//  9. INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  trackVisit();
+  checkReturningCustomer();
+});
+</script>
+
+</body>
+</html>
